@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WeatherAppTask</string>
+    <string name="title_toolbar">WeatherApp.Android</string>
+    <string name="search_by">Search by</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="get_weather">Get weather</string>
+</resources>
