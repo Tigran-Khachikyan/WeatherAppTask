@@ -2,7 +2,7 @@ package com.example.weatherapptask.data.network.mappers
 
 import android.content.Context
 import android.location.Geocoder
-import com.example.weatherapptask.data.network.responses.WeatherInfoResponse
+import com.example.weatherapptask.data.network.responses.weather.WeatherInfoResponse
 import com.example.weatherapptask.domain.weather.models.Unit
 import com.example.weatherapptask.domain.weather.models.WeatherInfo
 import java.text.SimpleDateFormat
@@ -43,7 +43,7 @@ object WeatherInfoMapper {
         return if (lat != null && lon != null) {
             try {
                 val addresses = Geocoder(context).getFromLocation(lat, lon, 1)
-                addresses[0].countryName
+                addresses[0].getAddressLine(0)
             } catch (ex: Exception) {
                 UNKNOWN
             }

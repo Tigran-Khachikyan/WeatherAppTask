@@ -8,7 +8,7 @@ enum class Unit {
     METRIC,
     IMPERIAL;
 
-    fun getName(): String = this.name.toLowerCase(Locale.US)
+    fun getServerName(): String = this.name.toLowerCase(Locale.US)
 
     sealed class Converter {
 

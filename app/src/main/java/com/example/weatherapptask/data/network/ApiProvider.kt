@@ -1,6 +1,5 @@
 package com.example.weatherapptask.data.network
 
-import com.example.weatherapptask.BuildConfig
 import com.google.gson.Gson
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -15,6 +14,10 @@ class ApiProvider(
 
     private lateinit var myServiceApi: WeatherServiceApi
 
+    companion object {
+        private const val BASE_URL = "http://api.openweathermap.org/data/2.5/"
+    }
+
     fun init() {
         initMyServiceApi()
     }
@@ -23,7 +26,7 @@ class ApiProvider(
 
     private fun initMyServiceApi() {
         myServiceApi = Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(
                         OkHttpClient.Builder()

@@ -1,4 +1,4 @@
-package com.example.weatherapptask.data.network.responses
+package com.example.weatherapptask.data.network.responses.weather
 
 data class Weather(
     val description: String?,

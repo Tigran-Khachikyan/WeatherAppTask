@@ -4,4 +4,11 @@
     <string name="search_by">Search by</string>
     <string name="zip_code">Zip Code</string>
     <string name="get_weather">Get weather</string>
+    <string name="location">Location</string>
+    <string name="temperature">Temperature</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="humidity">Humidity</string>
+    <string name="visibility">Visibility</string>
+    <string name="sunrise">Time of Sunrise</string>
+    <string name="sunset">Time of Sunset</string>
 </resources>
