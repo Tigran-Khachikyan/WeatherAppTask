@@ -2,11 +2,10 @@ package com.example.weatherapptask.domain.weather.models
 
 import java.util.*
 
-enum class Unit {
+enum class Unit (val tempUnit: String, val speedUnit: String) {
 
-    STANDARD,
-    METRIC,
-    IMPERIAL;
+    METRIC("C","m/s"),
+    IMPERIAL("F","mph");
 
     fun getServerName(): String = this.name.toLowerCase(Locale.US)
 

@@ -8,27 +8,22 @@ import com.example.weatherapptask.domain.weather.models.WeatherInfo
 import java.text.SimpleDateFormat
 import java.util.*
 
-object WeatherInfoMapper {
+const val UNKNOWN = "Unknown"
+const val UNKNOWN_TEMP_SEED = -999999999F
+const val UNKNOWN_HUMIDITY = -999999999
 
-    const val UNKNOWN = "Unknown"
-    const val UNKNOWN_TEMP = -999999999F
-    const val UNKNOWN_SPEED = -999999999F
-    const val UNKNOWN_HUMIDITY = -999999999
+class WeatherInfoMapper(private val context: Context) {
 
-    fun weatherInfoFromResponse(response: WeatherInfoResponse, context: Context): WeatherInfo {
+    fun weatherInfoFromResponse(response: WeatherInfoResponse): WeatherInfo {
         return WeatherInfo(
                 location = response.name ?: UNKNOWN,
-                temperature = response.main?.temp?.toFloat()
-                        ?.let { Unit.Converter.Temperature.fahrenheitFromKelvin(it) }
-                        ?: UNKNOWN_TEMP,
-                windSpeed = response.wind?.speed?.toFloat()
-                        ?.let { Unit.Converter.Speed.milesPerHourFromMeterPerSecond(it) }
-                        ?: UNKNOWN_SPEED,
+                temperature = response.main?.temp?.toFloat() ?: UNKNOWN_TEMP_SEED,
+                windSpeed = response.wind?.speed?.toFloat() ?: UNKNOWN_TEMP_SEED,
                 humidity = response.main?.humidity ?: UNKNOWN_HUMIDITY,
                 visibility = response.weather?.get(0)?.main ?: UNKNOWN,
                 sunrise = response.sys?.sunrise?.getDateTime() ?: UNKNOWN,
                 sunset = response.sys?.sunset?.getDateTime() ?: UNKNOWN,
-                country = getCountryName(response.coord?.lat, response.coord?.lat, context),
+                country = getCountryName(response.coord?.lat, response.coord?.lon),
                 unit = Unit.IMPERIAL
         )
     }
@@ -39,11 +34,11 @@ object WeatherInfoMapper {
         return format.format(date)
     }
 
-    private fun getCountryName(lat: Double?, lon: Double?, context: Context): String {
+    private fun getCountryName(lat: Double?, lon: Double?): String {
         return if (lat != null && lon != null) {
             try {
                 val addresses = Geocoder(context).getFromLocation(lat, lon, 1)
-                addresses[0].getAddressLine(0)
+                addresses[0].countryName
             } catch (ex: Exception) {
                 UNKNOWN
             }

@@ -15,7 +15,7 @@ interface WeatherServiceApi {
     @GET("weather")
     suspend fun getCurrentWeather(
             @Query("q") city: String,
-            @Query("units") unit: String = Unit.STANDARD.getServerName())
+            @Query("units") unit: String = Unit.IMPERIAL.getServerName())
             : Response<WeatherInfoResponse>
 
 }

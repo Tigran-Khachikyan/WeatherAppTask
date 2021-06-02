@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,7 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.weatherapptask.R;
+import com.example.weatherapptask.data.State;
 import com.example.weatherapptask.databinding.MainFragmentBinding;
+import com.example.weatherapptask.domain.weather.models.WeatherInfo;
 
 public class MainFragment extends Fragment {
 
@@ -36,20 +39,42 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel.observeCurrentWeather().observe(getViewLifecycleOwner(), info -> {
-            if (info != null) {
-                adapter.setWeatherInfo(info);
+        initViews();
+
+        viewModel.observeCurrentWeather().observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof State.Loading) {
+                binding.progressBar.setVisibility(View.VISIBLE);
+            } else {
+                binding.progressBar.setVisibility(View.GONE);
+                if (state instanceof State.Error) {
+                    String reason = ((State.Error<WeatherInfo>) state).getReason();
+                    Toast.makeText(getContext(), reason, Toast.LENGTH_SHORT).show();
+                    adapter.clearInfo();
+                } else {
+                    if (state instanceof State.Success) {
+                        if (state instanceof State.Success.FromNetwork) {
+                            Toast.makeText(getContext(), "Latest data", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Data from cache", Toast.LENGTH_SHORT).show();
+                        }
+                        adapter.setWeatherInfo(((State.Success<WeatherInfo>) state).getData());
+                    }
+                }
             }
-            binding.progressBar.setVisibility(View.GONE);
         });
+    }
+
+    private void initViews() {
+
+        String into = getString(R.string.search_by) + " " + getString(R.string.location);
+        binding.tvIntro.setText(into);
 
         adapter = new WeatherInfoAdapter();
         binding.rvWeatherInfo.setAdapter(adapter);
 
         binding.btnGetWeather.setOnClickListener(v -> {
-            binding.progressBar.setVisibility(View.VISIBLE);
             String input = binding.etInput.getText().toString();
-            viewModel.getCurrentWeather(input);
+            viewModel.act(new MainViewModel.Action.GetWeatherInfo(input));
         });
     }
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapptask.R
 import com.example.weatherapptask.databinding.ListItemWeatherInfoBinding
+import com.example.weatherapptask.domain.weather.models.Unit
 import com.example.weatherapptask.domain.weather.models.WeatherInfo
 
 class WeatherInfoAdapter : RecyclerView.Adapter<WeatherInfoAdapter.Holder>() {
@@ -14,9 +15,14 @@ class WeatherInfoAdapter : RecyclerView.Adapter<WeatherInfoAdapter.Holder>() {
     private var infoFields = mutableListOf<InfoField>()
 
     fun setWeatherInfo(info: WeatherInfo) {
-        Log.d("hhh555","setWeatherInfo info: "+ info?.country)
+        Log.d("hhh555", "setWeatherInfo info: " + info.country)
 
         getInfoList(info)
+        notifyDataSetChanged()
+    }
+
+    fun clearInfo() {
+        infoFields.clear()
         notifyDataSetChanged()
     }
 
@@ -43,13 +49,13 @@ class WeatherInfoAdapter : RecyclerView.Adapter<WeatherInfoAdapter.Holder>() {
     private fun getInfoList(info: WeatherInfo) {
 
         infoFields = mutableListOf<InfoField>().apply {
-            add(InfoField(R.string.location, info.location))
-            add(InfoField(R.string.temperature, info.temperature.toString()))
-            add(InfoField(R.string.wind_speed, info.windSpeed.toString()))
-            add(InfoField(R.string.humidity, info.humidity.toString()))
-            add(InfoField(R.string.visibility, info.visibility.toString()))
-            add(InfoField(R.string.sunrise, info.sunrise.toString()))
-            add(InfoField(R.string.sunset, info.sunset.toString()))
+            add(InfoField(R.string.country, info.country))
+            add(InfoField(R.string.temperature, "${info.temperature} ${info.unit.tempUnit}"))
+            add(InfoField(R.string.wind_speed, "${info.windSpeed} ${info.unit.speedUnit}"))
+            add(InfoField(R.string.humidity, "${info.humidity} %"))
+            add(InfoField(R.string.visibility, info.visibility))
+            add(InfoField(R.string.sunrise, info.sunrise))
+            add(InfoField(R.string.sunset, info.sunset))
         }
     }
 
@@ -57,5 +63,4 @@ class WeatherInfoAdapter : RecyclerView.Adapter<WeatherInfoAdapter.Holder>() {
             val paramNameRes: Int,
             val paramValue: String
     )
-
 }
