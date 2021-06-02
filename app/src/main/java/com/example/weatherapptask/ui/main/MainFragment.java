@@ -12,7 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.weatherapptask.R;
-import com.example.weatherapptask.data.State;
+import com.example.weatherapptask.data.repositories.Errors;
+import com.example.weatherapptask.data.repositories.State;
 import com.example.weatherapptask.databinding.MainFragmentBinding;
 import com.example.weatherapptask.domain.weather.models.WeatherInfo;
 
@@ -47,8 +48,23 @@ public class MainFragment extends Fragment {
             } else {
                 binding.progressBar.setVisibility(View.GONE);
                 if (state instanceof State.Error) {
-                    String reason = ((State.Error<WeatherInfo>) state).getReason();
-                    Toast.makeText(getContext(), reason, Toast.LENGTH_SHORT).show();
+                    Errors error = ((State.Error<WeatherInfo>) state).getError();
+                    String issue = "Some other issues occurred";
+                    switch (error) {
+                        case ERROR_CONNECTION:
+                            issue = "Check connection!";
+                            break;
+                        case ERROR_RESPONSE_EMPTY:
+                            issue = "Response is empty!";
+                            break;
+                        case ERROR_RESPONSE_NOT_SUCCEED:
+                            issue = "Response failed!";
+                            break;
+                        case CACHE_EMPTY:
+                            issue = "Not found in cache";
+                            break;
+                    }
+                    Toast.makeText(getContext(), issue, Toast.LENGTH_SHORT).show();
                     adapter.clearInfo();
                 } else {
                     if (state instanceof State.Success) {
@@ -65,7 +81,6 @@ public class MainFragment extends Fragment {
     }
 
     private void initViews() {
-
         String into = getString(R.string.search_by) + " " + getString(R.string.location);
         binding.tvIntro.setText(into);
 

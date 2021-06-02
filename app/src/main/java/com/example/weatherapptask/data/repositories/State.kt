@@ -1,4 +1,4 @@
-package com.example.weatherapptask.data
+package com.example.weatherapptask.data.repositories
 
 sealed class State<T> {
 
@@ -9,5 +9,5 @@ sealed class State<T> {
         class FromCache<T>(override val data: T) : Success<T>(data)
     }
 
-    data class Error<T>(val reason: String) : State<T>()
+    data class Error<T>(val error: Errors) : State<T>()
 }

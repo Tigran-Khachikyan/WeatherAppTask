@@ -9,9 +9,7 @@ import retrofit2.http.Query
 
 interface WeatherServiceApi {
 
-    // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
-    // api.openweathermap.org/data/2.5/find?q=London&units=metric
-
+    // api.openweathermap.org/data/2.5/find?q=London&units=metric&appid={API key}
     @GET("weather")
     suspend fun getCurrentWeather(
             @Query("q") city: String,

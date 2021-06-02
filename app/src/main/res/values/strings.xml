@@ -11,4 +11,5 @@
     <string name="visibility">Visibility</string>
     <string name="sunrise">Time of Sunrise</string>
     <string name="sunset">Time of Sunset</string>
+    <string name="unspecified">Unspecified</string>
 </resources>

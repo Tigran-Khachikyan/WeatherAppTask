@@ -8,6 +8,7 @@ import com.example.weatherapptask.domain.weather.models.WeatherInfo
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 const val UNKNOWN = "Unknown"
 const val UNKNOWN_TEMP_SEED = -999999999F
 const val UNKNOWN_HUMIDITY = -999999999
@@ -29,9 +30,10 @@ class WeatherInfoMapper(private val context: Context) {
     }
 
     private fun Long.getDateTime(): String {
-        val date = Date(this)
-        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
-        return format.format(date)
+        val date = Date(this * 1000)
+        val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa", Locale.US)
+        formatter.timeZone = TimeZone.getTimeZone("gmt")
+        return formatter.format(date) + " UTC"
     }
 
     private fun getCountryName(lat: Double?, lon: Double?): String {

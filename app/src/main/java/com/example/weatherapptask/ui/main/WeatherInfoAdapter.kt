@@ -1,13 +1,14 @@
 package com.example.weatherapptask.ui.main
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapptask.R
+import com.example.weatherapptask.data.network.mappers.UNKNOWN
+import com.example.weatherapptask.data.network.mappers.UNKNOWN_HUMIDITY
+import com.example.weatherapptask.data.network.mappers.UNKNOWN_TEMP_SEED
 import com.example.weatherapptask.databinding.ListItemWeatherInfoBinding
-import com.example.weatherapptask.domain.weather.models.Unit
 import com.example.weatherapptask.domain.weather.models.WeatherInfo
 
 class WeatherInfoAdapter : RecyclerView.Adapter<WeatherInfoAdapter.Holder>() {
@@ -15,8 +16,6 @@ class WeatherInfoAdapter : RecyclerView.Adapter<WeatherInfoAdapter.Holder>() {
     private var infoFields = mutableListOf<InfoField>()
 
     fun setWeatherInfo(info: WeatherInfo) {
-        Log.d("hhh555", "setWeatherInfo info: " + info.country)
-
         getInfoList(info)
         notifyDataSetChanged()
     }
@@ -50,9 +49,12 @@ class WeatherInfoAdapter : RecyclerView.Adapter<WeatherInfoAdapter.Holder>() {
 
         infoFields = mutableListOf<InfoField>().apply {
             add(InfoField(R.string.country, info.country))
-            add(InfoField(R.string.temperature, "${info.temperature} ${info.unit.tempUnit}"))
-            add(InfoField(R.string.wind_speed, "${info.windSpeed} ${info.unit.speedUnit}"))
-            add(InfoField(R.string.humidity, "${info.humidity} %"))
+            val temp = info.temperature.let { if (it == UNKNOWN_TEMP_SEED) UNKNOWN else "$it ${info.unit.tempUnit}" }
+            add(InfoField(R.string.temperature, temp))
+            val speed = info.windSpeed.let { if (it == UNKNOWN_TEMP_SEED) UNKNOWN else "$it ${info.unit.speedUnit}" }
+            add(InfoField(R.string.wind_speed, speed))
+            val hum = info.humidity.let { if (it == UNKNOWN_HUMIDITY) UNKNOWN else "$it %" }
+            add(InfoField(R.string.humidity, hum))
             add(InfoField(R.string.visibility, info.visibility))
             add(InfoField(R.string.sunrise, info.sunrise))
             add(InfoField(R.string.sunset, info.sunset))

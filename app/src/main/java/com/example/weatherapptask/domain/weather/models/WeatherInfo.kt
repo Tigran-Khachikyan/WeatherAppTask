@@ -1,7 +1,5 @@
 package com.example.weatherapptask.domain.weather.models
 
-import java.util.*
-
 data class WeatherInfo(
         val location: String,
         val temperature: Float,

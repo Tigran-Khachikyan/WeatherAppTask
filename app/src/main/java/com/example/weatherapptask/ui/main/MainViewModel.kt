@@ -4,16 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapptask.data.State
+import com.example.weatherapptask.data.repositories.State
 import com.example.weatherapptask.domain.weather.WeatherInteractor
 import com.example.weatherapptask.domain.weather.models.WeatherInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+@KoinApiExtension
 class MainViewModel : ViewModel(), KoinComponent {
 
     private val _info = MutableLiveData<State<WeatherInfo>>()
@@ -22,7 +24,7 @@ class MainViewModel : ViewModel(), KoinComponent {
     fun act(action: Action) {
         when (action) {
             is Action.GetWeatherInfo -> getCurrentWeather(action.cityName)
-            // TODO
+            // Other actions of the screen
         }
     }
 
@@ -40,6 +42,6 @@ class MainViewModel : ViewModel(), KoinComponent {
 
     sealed class Action {
         data class GetWeatherInfo(val cityName: String) : Action()
-        // TODO
+        // Other actions of the screen
     }
 }
